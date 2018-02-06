@@ -1,0 +1,35 @@
+define      = -DFLEXIBLE ;FLexible water during minimization !
+; Run parameters
+integrator  = steep     ; Algorithm (steep = steepest descent minimization)
+emtol       = 100.0    	; Stop minimization when the maximum force < 100.0 [kJ/mol/nm]
+emstep      = 0.001     ; Energy step size [nm]
+nsteps      = 10000     ; Maximum number of (minimization) steps to perform
+
+; Output control
+nstxout		        = 0   		; save coordinates every 2.0 ps
+nstvout		        = 0		; save velocities every 2.0 ps
+nstenergy	        = 1000		; save energies every 2.0 ps
+nstlog		        = 1000		; update log file every 2.0 ps
+nstxout-compressed  	= 1000      ; save compressed coordinates every 2.0 ps
+                                    ; nstxout-compressed replaces nstxtcout
+compressed-x-grps   	= System    ; replaces xtc-grps
+
+; Neighborsearching
+cutoff-scheme   = Verlet
+ns_type		    = grid		; search neighboring grid cells
+nstlist		    = 10	    	; 20 fs, largely irrelevant with Verlet scheme
+rcoulomb	    = 1.2		; short-range electrostatic cutoff (in nm)
+rvdw		    = 1.2		; short-range van der Waals cutoff (in nm)
+
+; Electrostatics
+coulombtype	    = PME		; Particle Mesh Ewald for long-range electrostatics
+pme_order	    = 4		    	; cubic interpolation
+fourierspacing	    = 0.12		; grid spacing for FFT
+
+; Periodic boundary conditions
+pbc		= xyz		; 3-D PBC
+
+; Dispersion correction
+DispCorr	= EnerPres	; account for cut-off vdW scheme
+
+constraints = none
