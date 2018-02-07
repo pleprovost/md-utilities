@@ -3,7 +3,7 @@
 #SBATCH -J GMX
 #SBATCH -o ogmx.%j
 #SBATCH -e egmx.%j
-#SBATCH --constraint=[k40|k80]
+#SBATCH --constraint=[k80|p100]
 #SBATCH -N 2
 #SBATCH --ntasks-per-node=2
 #SBATCH --exclusive
