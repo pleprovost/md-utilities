@@ -45,7 +45,7 @@ export OMP_NUM_THREADS=6
 ((tasks=2*SLURM_NNODES))
 
 # Export specific force field location (Modify of you use a different location)
-export GMXLIB=~/gmx_files/forcefield/top
+export GMXLIB=forcefield_link
 
 # Set the name of the directory for the simulation
 MDRUN_NAME=$1

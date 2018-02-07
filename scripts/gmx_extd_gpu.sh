@@ -31,7 +31,7 @@ export OMP_NUM_THREADS=6
 ((tasks=2*SLURM_NNODES))
 # this script runs a 24 core (2 full nodes) + 2 GPGPU:s per node gromacs job
 # each node will run 2 mpitasks, $tasks in total, each spawning 6 threads
-export GMXLIB=~/gmx_files/forcefield/top
+export GMXLIB=forcefield_link
 
 # Topology file
 if [ ! -f $1 ]; then

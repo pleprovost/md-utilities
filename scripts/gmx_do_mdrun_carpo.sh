@@ -21,7 +21,7 @@ fi
 module load GROMACS/5.1.4-foss-2016b-mt
 
 export OMP_NUM_THREADS=1
-export GMXLIB=~/gmx_files/forcefield/top
+export GMXLIB=forcefield_link
 
 # Input PDB
 MDRUN_NAME=$1

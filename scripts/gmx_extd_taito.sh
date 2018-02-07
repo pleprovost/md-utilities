@@ -18,7 +18,7 @@ fi
 module load gromacs-env
 
 export OMP_NUM_THREADS=1
-export GMXLIB=~/gmx_files/forcefield/top
+export GMXLIB=forcefield_link
 
 # Topology file
 if [ ! -f $1 ]; then
