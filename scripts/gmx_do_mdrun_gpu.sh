@@ -3,11 +3,10 @@
 #SBATCH -J GMX
 #SBATCH -o ogmx.%j
 #SBATCH -e egmx.%j
-#SBATCH --constraint=[k80|p100]
 #SBATCH -N 2
-#SBATCH --ntasks-per-node=2
-#SBATCH --exclusive
-#SBATCH --gres=gpu:2
+#SBATCH --ntasks-per-node=4
+#SBATCH --cpus-per-task=6
+#SBATCH --gres=gpu:k80:4
 #SBATCH --mem-per-cpu=128
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=pierre.leprovost@oulu.fi
@@ -90,7 +89,7 @@ cd $MDRUN_NAME
 
 gmx grompp -f $MDP_FILE -c $STRUCTURE_FILE -p $TOPOLOGY_FILE $INDEX_FLAG -o $MDRUN_NAME.tpr
 
-srun --gres=gpu:2 -n $tasks gmx_mpi mdrun -ntomp $OMP_NUM_THREADS -pin on -deffnm $MDRUN_NAME -dlb auto
+srun gmx_mpi mdrun -ntomp $OMP_NUM_THREADS -pin on -deffnm $MDRUN_NAME -dlb auto
 
 cd ..
 
@@ -99,4 +98,4 @@ cd ..
 # end of the standard out file
 # Use that to improve your resource request estimate
 # on later jobs.
-used_slurm_resources.bash
+seff $SLURM_JOBID

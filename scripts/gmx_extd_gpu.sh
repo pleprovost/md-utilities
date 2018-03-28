@@ -3,16 +3,14 @@
 #SBATCH -J GMX
 #SBATCH -o ogmx.%j
 #SBATCH -e egmx.%j
-#SBATCH --constraint=[k40|k80]
 #SBATCH -N 2
-#SBATCH --ntasks-per-node=2
-#SBATCH --exclusive
-#SBATCH --gres=gpu:2
+#SBATCH --ntasks-per-node=4
+#SBATCH --cpus-per-task=6
+#SBATCH --gres=gpu:k80:4
 #SBATCH --mem-per-cpu=128
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=pierre.leprovost@oulu.fi
-
-
+ 
 set -e
 
 if [ $# -gt 2]; then
@@ -55,7 +53,7 @@ NEW=md_${arr[1]}_${2}ns
 
 gmx convert-tpr -s $OLD.tpr -until ${EXTEND} -o $NEW.tpr
 
-srun --gres=gpu:2 -n $tasks gmx_mpi mdrun -ntomp $OMP_NUM_THREADS -pin on -deffnm $NEW -cpi $OLD.cpt -dlb auto -maxh 71.99
+srun gmx_mpi mdrun -ntomp $OMP_NUM_THREADS -pin on -deffnm $NEW -cpi $OLD.cpt -dlb auto -maxh 71.99
 
 # This script will print some usage statistics to the
 # end of the standard out file
