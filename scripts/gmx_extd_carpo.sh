@@ -14,7 +14,7 @@ if [ $# -ne 2 ]; then
     exit 1
 fi
 
-module load GROMACS/5.1.4-foss-2016b-mt
+module load GROMACS/2016.4
 
 export OMP_NUM_THREADS=1
 export GMXLIB=forcefield_link

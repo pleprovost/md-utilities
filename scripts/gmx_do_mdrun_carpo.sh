@@ -1,9 +1,9 @@
 #!/bin/bash -l
 #SBATCH --ntasks-per-node=24
-#SBATCH -J gmx_md
+#SBATCH -J GMXMD
 #SBATCH -o ogmx.%j
 #SBATCH -e egmx.%j
-#SBATCH --mem-per-cpu=150
+#SBATCH --mem-per-cpu=100
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=pierre.leprovost@oulu.fi
 
@@ -18,7 +18,7 @@ elif [ $# -lt 4]; then
     echo $0: usage: gmx_do_mdrun_taito mdrun_name mdp_file structure_file topology_file index_file_optional
 fi
     
-module load GROMACS/5.1.4-foss-2016b-mt
+module load GROMACS/2016.4
 
 export OMP_NUM_THREADS=1
 export GMXLIB=forcefield_link
@@ -64,7 +64,7 @@ fi
 mkdir $MDRUN_NAME
 cd $MDRUN_NAME
 
-gmx grompp -f $MDP_FILE -c $STRUCTURE_FILE -p $TOPOLOGY_FILE $INDEX_FLAG -o $MDRUN_NAME.tpr
+gmx grompp -f $MDP_FILE -c $STRUCTURE_FILE -p $TOPOLOGY_FILE $INDEX_FLAG -o $MDRUN_NAME.tpr -maxwarn 2
 
 srun gmx_mpi mdrun -deffnm $MDRUN_NAME -dlb yes
 

@@ -59,7 +59,7 @@ fi
 mkdir $MDRUN_NAME
 cd $MDRUN_NAME
 
-$GMX grompp -f $MDP_FILE -c $STRUCTURE_FILE -p $TOPOLOGY_FILE $INDEX_FLAG -o $MDRUN_NAME.tpr
+$GMX grompp -f $MDP_FILE -c $STRUCTURE_FILE -p $TOPOLOGY_FILE $INDEX_FLAG -o $MDRUN_NAME.tpr -maxwarn 2
 
 $GMX mdrun -pin auto -deffnm $MDRUN_NAME -dlb yes -v 
 
