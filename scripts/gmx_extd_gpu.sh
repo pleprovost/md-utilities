@@ -59,4 +59,4 @@ srun gmx_mpi mdrun -ntomp $OMP_NUM_THREADS -pin on -deffnm $NEW -cpi $OLD.cpt -d
 # end of the standard out file
 # Use that to improve your resource request estimate
 # on later jobs.
-used_slurm_resources.bash
+seff $SLURM_JOBID

@@ -76,4 +76,4 @@ cd ..
 # end of the standard out file
 # Use that to improve your resource request estimate
 # on later jobs.
-used_slurm_resources.bash
+seff $SLURM_JOBID
