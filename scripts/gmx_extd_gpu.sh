@@ -41,13 +41,13 @@ fi
 EXTEND=$(expr ${2} \* 1000)
 
 # Input : Format md_PDBID_TIME.tpr
-OLD=${1%.*}
-
-oIFS="$IFS"
-IFS=_ arr=( $OLD )
-IFS="$oIFS"
-
-NEW=md_${arr[1]}_${2}ns
+LD=${1%.*}
+if [[ $OLD = *_*ns ]]; then
+    NEW=${OLD/_*ns/_${2}ns}
+else
+    NEW=${OLD}_${2}ns
+fi
+echo $NEW
 
 # PRODUCTION
 
