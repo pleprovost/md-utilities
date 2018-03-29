@@ -41,7 +41,7 @@ fi
 EXTEND=$(expr ${2} \* 1000)
 
 # Input : Format md_PDBID_TIME.tpr
-LD=${1%.*}
+OLD=${1%.*}
 if [[ $OLD = *_*ns ]]; then
     NEW=${OLD/_*ns/_${2}ns}
 else
@@ -59,4 +59,4 @@ srun gmx_mpi mdrun -ntomp $OMP_NUM_THREADS -pin on -deffnm $NEW -cpi $OLD.cpt -d
 # end of the standard out file
 # Use that to improve your resource request estimate
 # on later jobs.
-used_slurm_resources.bash
+seff $SLURM_JOBID

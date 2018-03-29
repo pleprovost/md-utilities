@@ -48,4 +48,4 @@ srun gmx_mpi mdrun -deffnm $NEW -cpi $OLD.cpt -dlb yes -maxh 71.99
 # end of the standard out file
 # Use that to improve your resource request estimate
 # on later jobs.
-used_slurm_resources.bash
+seff $SLURM_JOBID
