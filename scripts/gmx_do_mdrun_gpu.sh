@@ -1,13 +1,13 @@
 #!/bin/bash -l
-#SBATCH -p gpu
+#SBATCH -p gputest
 #SBATCH -J GMX
 #SBATCH -o ogmx.%j
 #SBATCH -e egmx.%j
-#SBATCH -N 2
+#SBATCH -N 1
 #SBATCH --ntasks-per-node=4
 #SBATCH --cpus-per-task=6
 #SBATCH --gres=gpu:k80:4
-#SBATCH --mem-per-cpu=128
+#SBATCH --mem-per-cpu=128M
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=pierre.leprovost@oulu.fi
 
@@ -41,7 +41,6 @@ module load gromacs-env
 # this script runs a 24 core (2 full nodes) + 2 GPGPU:s per node gromacs job
 # each node will run 2 mpitasks, $tasks in total, each spawning 6 threads
 export OMP_NUM_THREADS=6
-((tasks=2*SLURM_NNODES))
 
 # Export specific force field location (Modify of you use a different location)
 export GMXLIB=forcefield_link

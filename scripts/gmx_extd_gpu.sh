@@ -1,13 +1,12 @@
 #!/bin/bash -l
 #SBATCH -p gpu
-#SBATCH -J GMX
+#SBATCH -J GMX_GPU
 #SBATCH -o ogmx.%j
 #SBATCH -e egmx.%j
-#SBATCH -N 2
+#SBATCH -N 1
 #SBATCH --ntasks-per-node=4
-#SBATCH --cpus-per-task=6
-#SBATCH --gres=gpu:k80:4
-#SBATCH --mem-per-cpu=128
+#SBATCH --cpus-per-task=7
+#SBATCH --gres=gpu:p100:4
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=pierre.leprovost@oulu.fi
  
@@ -25,8 +24,8 @@ fi
 
 module load gromacs-env
 
-export OMP_NUM_THREADS=6
-((tasks=2*SLURM_NNODES))
+export OMP_NUM_THREADS=7
+
 # this script runs a 24 core (2 full nodes) + 2 GPGPU:s per node gromacs job
 # each node will run 2 mpitasks, $tasks in total, each spawning 6 threads
 export GMXLIB=forcefield_link
@@ -42,10 +41,10 @@ EXTEND=$(expr ${2} \* 1000)
 
 # Input : Format md_PDBID_TIME.tpr
 OLD=${1%.*}
-if [[ $OLD = *_*ns ]]; then
-    NEW=${OLD/_*ns/_${2}ns}
+if [[ $OLD = *-*ns ]]; then
+    NEW=${OLD/-*ns/-${2}ns}
 else
-    NEW=${OLD}_${2}ns
+    NEW=${OLD}-${2}ns
 fi
 echo $NEW
 
@@ -53,7 +52,7 @@ echo $NEW
 
 gmx convert-tpr -s $OLD.tpr -until ${EXTEND} -o $NEW.tpr
 
-srun gmx_mpi mdrun -ntomp $OMP_NUM_THREADS -pin on -deffnm $NEW -cpi $OLD.cpt -dlb auto -maxh 71.99
+srun gmx_mpi mdrun -ntomp $OMP_NUM_THREADS -pin on -s $NEW -cpi $OLD.cpt -noappend -dlb auto -maxh 71.99
 
 # This script will print some usage statistics to the
 # end of the standard out file
