@@ -52,7 +52,7 @@ echo $NEW
 
 gmx convert-tpr -s $OLD.tpr -until ${EXTEND} -o $NEW.tpr
 
-srun gmx_mpi mdrun -ntomp $OMP_NUM_THREADS -pin on -s $NEW -cpi $OLD.cpt -noappend -dlb auto -maxh 71.99
+srun gmx_mpi mdrun -ntomp $OMP_NUM_THREADS -pin on -s $NEW -cpi $OLD.cpt -cpo $NEW.cpt -x $NEW.xtc -e $NEW.edr -g $NEW.log -noappend -dlb auto -maxh 71.99
 
 # This script will print some usage statistics to the
 # end of the standard out file
