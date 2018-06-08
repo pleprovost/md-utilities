@@ -9,7 +9,7 @@ import subprocess
 description = """ """
 
 # Config parameters
-email = 'pierre.leprovost@oulu.fi'
+email = 'EMAIL'
 template_path= '/koti/pleprovo/gmx-utilities/scripts/factory/templates/'    
     
 class GmxWrapper:
