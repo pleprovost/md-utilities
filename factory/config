@@ -1,0 +1,7 @@
+#/bin/sh
+
+echo "If desired enter your adress email (email adress if needed for getting job completion messages)"
+
+read email
+
+sed -i "s/EMAIL/${email}/g" gmx_script_factory.py
