@@ -1,7 +1,13 @@
-#/bin/sh
+#!/bin/bash
+
+set -e
 
 echo "If desired enter your adress email (email adress if needed for getting job completion messages)"
 
 read email
 
-sed -i "s/EMAIL/${email}/g" gmx_script_factory.py
+path="`pwd`"
+echo "Configure here "${path}
+
+sed -i -e "s~PATH_CONFIG~$path~g" gmx_script_factory.py
+sed -i -e "s~EMAIL_CONFIG~$email~g" gmx_script_factory.py

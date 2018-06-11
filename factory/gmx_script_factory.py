@@ -9,14 +9,14 @@ import subprocess
 description = """ """
 
 # Config parameters
-email = 'EMAIL'
-template_path= '/koti/pleprovo/gmx-utilities/scripts/factory/templates/'    
+email = 'EMAIL_CONFIG'
+template_path= 'PATH_CONFIG'    
     
 class GmxWrapper:
     def __init__(self, args):
         self.args = args
         self.replacement = {'MDRUN_NAME': str(self.args.name),
-                            '$email': str(email),
+                            'EMAIL': str(email),
                             'TIME': str(self.args.timelimit)}
     def mdrun(self):
         cpt_option = ''
