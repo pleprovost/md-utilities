@@ -1,5 +1,5 @@
 #!/bin/bash -l
-#SBATCH -p gputest
+#SBATCH -p gpu
 #SBATCH -J MDRUN_NAME
 #SBATCH -t TIME
 #SBATCH -o ogmx.%j

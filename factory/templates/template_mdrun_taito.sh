@@ -1,6 +1,9 @@
 #!/bin/bash -l
+#SBATCH -p parallel
 #SBATCH --constraint=snb
 #SBATCH --ntasks-per-node=16
+#SBATCH -N NB_NODE
+#SBATCH -t TIME
 #SBATCH -J JOB_NAME
 #SBATCH -o ogmx.%j
 #SBATCH -e egmx.%j
@@ -14,7 +17,7 @@ module load gromacs-env
 
 export OMP_NUM_THREADS=1
 
-srun gmx_mpi mdrun -deffnm $MDRUN_NAME -dlb yes -maxh 71.99 -append no
+srun gmx_mpi mdrun -deffnm MDRUN_NAME -dlb yes -maxh 71.99 
 
 # This script will print some usage statistics to the
 # end of the standard out file

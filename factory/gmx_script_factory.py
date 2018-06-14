@@ -17,7 +17,8 @@ class GmxWrapper:
         self.args = args
         self.replacement = {'MDRUN_NAME': str(self.args.name),
                             'EMAIL': str(email),
-                            'TIME': str(self.args.timelimit)}
+                            'TIME': str(self.args.timelimit),
+                            'NB_NODE': str(self.args.nodes)}
     def mdrun(self):
         cpt_option = ''
         if self.args.cpt:
@@ -48,7 +49,7 @@ class GmxWrapper:
         
     def write_script(self, filename, filepath='.'):
         template = ''        
-        with open(template_path+'/template_mdrun_'+self.args.machine+'.sh', 'r') as infile:
+        with open('{0}/templates/template_mdrun_{1}.sh'.format(template_path, self.args.machine), 'r') as infile:
             template = infile.read()
             for key, value in self.replacement.iteritems():
                 template = template.replace(key, value)
@@ -106,10 +107,10 @@ if __name__ == "__main__":
                         help='select the machine on which we run the job', default='local')
     parser.add_argument('-N', '--nodes', dest='nodes', type=int,
                         help='store the number of nodes allocated for this job',
-                        required='--machine' in sys.argv)
+                        required='--machine' or '-ma' in sys.argv)
     parser.add_argument('-tl', '--timelimit', dest='timelimit', type=str,
                         help='store the time limit allocated to this job',
-                        required='--machine' in sys.argv)
+                        required='--machine' or '-ma' in sys.argv)
 
     args = parser.parse_args()    
     
