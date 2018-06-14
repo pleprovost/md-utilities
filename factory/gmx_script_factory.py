@@ -48,7 +48,7 @@ class GmxWrapper:
         
     def write_script(self, filename, filepath='.'):
         template = ''        
-        with open(template_path+'template_mdrun_'+self.args.machine+'.sh', 'r') as infile:
+        with open(template_path+'/template_mdrun_'+self.args.machine+'.sh', 'r') as infile:
             template = infile.read()
             for key, value in self.replacement.iteritems():
                 template = template.replace(key, value)
