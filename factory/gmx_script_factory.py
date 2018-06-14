@@ -33,7 +33,7 @@ class GmxWrapper:
             os.path.abspath(self.args.topol),
             self.args.name+'/'+self.args.name+'.tpr',
             cpt_option)
-        subprocess.check_output(commands, shell=True)
+        subprocess.check_call(commands, shell=True)
         
     def extend(self):
         commands = 'set -e; '
@@ -44,7 +44,7 @@ class GmxWrapper:
             os.path.abspath(self.args.cpt),
             str(int(self.args.extend*1000)),
             self.args.name+'.tpr')
-        subprocess.check_output(commands, shell=True)
+        subprocess.check_call(commands, shell=True)
         
     def write_script(self, filename, filepath='.'):
         template = ''        
