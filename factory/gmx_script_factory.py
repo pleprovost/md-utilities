@@ -15,10 +15,16 @@ template_path= 'PATH_CONFIG'
 class GmxWrapper:
     def __init__(self, args):
         self.args = args
+        if self.args.job == 'extend':
+            cpt_option = '-cpi {}'.format(self.args.cpt)
+        else:
+            cpt_option = ''
+            
         self.replacement = {'MDRUN_NAME': str(self.args.name),
                             'EMAIL': str(email),
                             'TIME': str(self.args.timelimit),
-                            'NB_NODE': str(self.args.nodes)}
+                            'NB_NODE': str(self.args.nodes),
+                            'CPT_OPTION':cpt_option}
     def mdrun(self):
         cpt_option = ''
         if self.args.cpt:

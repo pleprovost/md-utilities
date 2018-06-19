@@ -30,7 +30,7 @@ module load gromacs-env
 # each node will run 2 mpitasks, $tasks in total, each spawning 6 threads
 export OMP_NUM_THREADS=7
 
-srun gmx_mpi mdrun -ntomp $OMP_NUM_THREADS -pin on -deffnm MDRUN_NAME -dlb auto -maxh 71.99
+srun gmx_mpi mdrun -ntomp $OMP_NUM_THREADS -pin on -deffnm MDRUN_NAME CPT_OPTION -dlb auto -maxh 71.99
 
 # This script will print some usage statistics to the
 # end of the standard out file

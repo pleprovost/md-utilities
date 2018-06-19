@@ -5,5 +5,5 @@
 
 set -e
 
-gmx mdrun -pin auto -deffnm MDRUN_NAME -dlb yes -v
+gmx mdrun -pin auto -deffnm MDRUN_NAME CPT_OPTION -dlb yes -v
 
