@@ -16,7 +16,7 @@ class GmxWrapper:
     def __init__(self, args):
         self.args = args
         if self.args.job == 'extend':
-            cpt_option = '-cpi {}'.format(self.args.cpt)
+            cpt_option = '-cpi {0}'.format(self.args.cpt)
         else:
             cpt_option = ''
             
