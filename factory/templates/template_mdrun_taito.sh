@@ -4,7 +4,7 @@
 #SBATCH --ntasks-per-node=16
 #SBATCH -N NB_NODE
 #SBATCH -t TIME
-#SBATCH -J MDRUN_NAME
+#SBATCH -J NAME
 #SBATCH -o ogmx.%j
 #SBATCH -e egmx.%j
 #SBATCH --mem-per-cpu=128
@@ -17,7 +17,7 @@ module load gromacs-env
 
 export OMP_NUM_THREADS=1
 
-srun gmx_mpi mdrun -deffnm MDRUN_NAME CPT_OPTION -dlb yes -maxh 71.99 
+srun gmx_mpi mdrun -deffnm NAME CPT_OPTION -dlb yes -maxh 71.99 
 
 # This script will print some usage statistics to the
 # end of the standard out file

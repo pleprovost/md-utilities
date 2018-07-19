@@ -2,6 +2,6 @@
 
 set -e
 
-LOAD_MODULE
+MODULE
 
-gmx convert-tpr -s TOPOL -f CPT -until TIMETOEXTEND -o OUTPUT
+gmx convert-tpr -s TOPOL -f CPTFILE -until TIMETOEXTEND -o NAME 

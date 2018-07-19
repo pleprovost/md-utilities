@@ -2,6 +2,6 @@
 
 set -e
 
-LOAD_MODULE
+MODULE
 
-gmx grompp -f MDP -c STRUCT -p TOPOL -o OUPUTNAME CPT_OPTION
+gmx grompp -f MDP -c STRUCT -p TOPOL -o NAME.tpr CPTOPTION
