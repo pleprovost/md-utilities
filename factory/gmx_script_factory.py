@@ -184,7 +184,7 @@ class GmxJobFactory:
     def mdrun(self):
         print 'Setting mdrun script'
         if self.args.cpt:
-            self.replacement['CPTOPTION'] = '-t {0} '.format(self.args.cpt)
+            self.replacement['CPTOPTION'] = '-cpi {0} '.format(self.args.cpt)
         self.write_template('{0}/template_prepare_mdrun.sh'.format(template_path),
                             'prepare_{0}.sh'.format(self.args.name))
         self.write_template('{0}/template_mdrun_{1}.sh'.format(template_path,
