@@ -13,8 +13,9 @@ email = 'pierre.leprovost@oulu.fi'
 
 template_path= '{0}/templates'.format(os.path.dirname(os.path.realpath(__file__)))
 
-machines = ('taito', 'carpo', 'sisu', 'local')
+machines = ('taito', 'gpu', 'carpo', 'sisu', 'local')
 modules = {'taito': 'module load gromacs-env',
+           'gpu' : 'module load gromacs-env',
            'sisu' : 'module load gromacs-env',
            'carpo' : 'module load GROMACS/2016.4',
            'local' : ''}
