@@ -195,7 +195,7 @@ class GmxJobFactory:
     def extend(self):
         print 'Setting extend script'
         self.replacement['NAME'] = 'extd-{0}ns'.format(int(float(self.args.timetoextend)/1000))
-        self.replacement['CPTOPTION'] = '-cpi {0}'.format(self.args.cpt)
+        self.replacement['CPTOPTION'] = '-cpi {0} -noappend'.format(self.args.cpt)
         self.write_template('{0}/template_prepare_extend.sh'.format(template_path),
                             'prepare_{0}.sh'.format(self.replacement['NAME']))
         self.write_template('{0}/template_mdrun_{1}.sh'.format(template_path,
