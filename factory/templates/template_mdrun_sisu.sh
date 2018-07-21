@@ -2,8 +2,8 @@
 #SBATCH -p parallel
 #SBATCH --constraint=snb
 #SBATCH --ntasks-per-node=16
-#SBATCH -N NODE
-#SBATCH -t TIMELIMIT
+#SBATCH -N NB_NODE
+#SBATCH -t TIME
 #SBATCH -J NAME
 #SBATCH -o ogmx.%j
 #SBATCH -e egmx.%j

@@ -1,7 +1,7 @@
 #!/bin/bash -l
 #SBATCH -p gpu
 #SBATCH -J NAME
-#SBATCH -t TIME
+#SBATCH -t TIMELIMIT
 #SBATCH -o ogmx.%j
 #SBATCH -e egmx.%j
 #SBATCH -N 1
@@ -30,7 +30,7 @@ module load gromacs-env
 # each node will run 2 mpitasks, $tasks in total, each spawning 6 threads
 export OMP_NUM_THREADS=7
 
-srun gmx_mpi mdrun -ntomp $OMP_NUM_THREADS -pin on -deffnm NAME CPT_OPTION -dlb auto -maxh 71.99
+srun gmx_mpi mdrun -ntomp $OMP_NUM_THREADS -pin on -deffnm NAME CPTOPTION -dlb auto -maxh 71.99
 
 # This script will print some usage statistics to the
 # end of the standard out file
