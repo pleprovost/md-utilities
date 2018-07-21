@@ -146,7 +146,7 @@ class JobParser:
         parser.add_argument('-N', '--nodes', dest='nodes', type=int,
                             help='store the number of nodes allocated for this job',
                             required=True)
-        parser.add_argument('-tl', '--timelimit', dest='timelimit', type=str,
+        parser.add_argument('-l', '--timelimit', dest='timelimit', type=str,
                             help='store the time limit allocated to this job',
                             required=True)
         
