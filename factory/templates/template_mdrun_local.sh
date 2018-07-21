@@ -5,5 +5,5 @@
 
 set -e
 
-gmx mdrun -pin auto -deffnm NAME CPTOPTION -dlb yes -v
+gromacs512 mdrun -pin auto -deffnm NAME -dlb yes -v CPTOPTION
 

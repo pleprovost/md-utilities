@@ -17,7 +17,7 @@ module load gromacs-env
 
 export OMP_NUM_THREADS=1
 
-srun gmx_mpi mdrun -deffnm NAME CPTOPTION -dlb yes -maxh 71.99 
+srun gmx_mpi mdrun -deffnm NAME -dlb yes -maxh 71.99 CPTOPTION
 
 # This script will print some usage statistics to the
 # end of the standard out file

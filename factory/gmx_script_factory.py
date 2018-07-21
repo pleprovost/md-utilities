@@ -26,7 +26,7 @@ class JobParser:
     name = ''
     struct = ''
     mdp = ''
-    extend = ''
+    timetoextend = ''
     cpt = ''
     nodes = ''
     timelimit = ''
@@ -82,10 +82,10 @@ class JobParser:
                 self.topol,
                 self.mdp)
         if self.job == 'extend':
-            output += 'Topology : {0}\n>cpt file : {1}\ntime to extend : {2}\n'.format(
+            output += 'Topology : {0}\ncpt file : {1}\ntime to extend : {2}\n'.format(
                 self.topol,
                 self.cpt,
-                self.extend)
+                int(float(self.timetoextend)/1000))
 
         if self.machine != 'local':
             output += 'Running on {0} with {1} nodes for {2} hours\n'.format(self.machine,
@@ -113,12 +113,16 @@ class JobParser:
         parser.add_argument('-m', '--mpd', dest='mdp', type=str,
                             help='store the mdp file for the job, the file must be of type .MDP',
                             required=True)
+        parser.add_argument('-c', '--cpt', dest='cpt', type=str,
+                            help='store the time to extend the simulation for extend jobs')
         
         args, unknown = parser.parse_known_args(sys.argv[3:])
 
         self.name = args.name
         self.struct = os.path.abspath(args.struct)
         self.mdp = os.path.abspath(args.mdp)
+        if args.cpt:
+            self.cpt = os.path.abspath(args.cpt)
         
     def extend(self):
         parser = argparse.ArgumentParser(
@@ -127,13 +131,13 @@ class JobParser:
         # extend
         parser.add_argument('-c', '--cpt', dest='cpt', type=str,
                             help='store the time to extend the simulation for extend jobs', required=True)
-        parser.add_argument('-e', '--extend', dest='extend', type=float,
+        parser.add_argument('-e', '--extend', dest='extend', type=str,
                             help='store the time to extend the simulation for extend jobs', required=True)
         
         args, unknown = parser.parse_known_args(sys.argv[3:])
 
         self.cpt = os.path.abspath(args.cpt)
-        self.extend = str(args.extend)
+        self.timetoextend = args.extend
 
     def machine_parser(self):
         parser = argparse.ArgumentParser(
@@ -158,14 +162,14 @@ class GmxJobFactory:
         self.replacement = {'NAME': self.args.name,
                             'EMAIL': email,
                             'TIMELIMIT': self.args.timelimit,
-                            'NODES': self.args.nodes,
+                            'NODE': self.args.nodes,
                             'CPTOPTION': '',
+                            'CPTFILE': self.args.cpt,
                             'STRUCT': self.args.struct,
                             'TOPOL': self.args.topol,
-                            'CPTFILE': self.args.cpt,
                             'MDP': self.args.mdp,
-                            'MODULE': modules[self.args.machine]}
-        
+                            'MODULE': modules[self.args.machine],
+                            'TIMETOEXTEND': self.args.timetoextend}
         getattr(self, self.args.job)()
         
     def write_template(self, filename, outname):
@@ -179,6 +183,8 @@ class GmxJobFactory:
             
     def mdrun(self):
         print 'Setting mdrun script'
+        if self.args.cpt:
+            self.replacement['CPTOPTION'] = '-t {0} '.format(self.args.cpt)
         self.write_template('{0}/template_prepare_mdrun.sh'.format(template_path),
                             'prepare_{0}.sh'.format(self.args.name))
         self.write_template('{0}/template_mdrun_{1}.sh'.format(template_path,
@@ -187,13 +193,13 @@ class GmxJobFactory:
         
     def extend(self):
         print 'Setting extend script'
-        self.replacement['NAME'] = 'extd-{0}'.format(int(self.args.extend)/1000)
-        self.replacement['CPTOPTION'] = '-cpi {0} -noappend'.format(self.args.cpt)
+        self.replacement['NAME'] = 'extd-{0}ns'.format(int(float(self.args.timetoextend)/1000))
+        self.replacement['CPTOPTION'] = '-cpi {0}'.format(self.args.cpt)
         self.write_template('{0}/template_prepare_extend.sh'.format(template_path),
-                            'prepare_extd-{0}'.format(self.replacement['NAME']))
+                            'prepare_{0}.sh'.format(self.replacement['NAME']))
         self.write_template('{0}/template_mdrun_{1}.sh'.format(template_path,
                                                            self.args.machine),
-                            'job_{0}'.format(self.replacement['NAME']))
+                            'job_{0}.sh'.format(self.replacement['NAME']))
             
 if __name__ == "__main__":
     # # Input parameters handling

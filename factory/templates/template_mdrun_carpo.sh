@@ -16,7 +16,6 @@ module load GROMACS/2016.4
 
 export OMP_NUM_THREADS=1
 
-srun gmx_mpi mdrun -deffnm NAME CPTOPTION -dlb yes -maxh 71.99  
+srun gmx_mpi mdrun -deffnm NAME -dlb yes -maxh 71.99 CPTOPTION  
 
-cd ..
 
