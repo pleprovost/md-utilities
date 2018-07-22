@@ -31,6 +31,7 @@ class JobParser:
     cpt = ''
     nodes = ''
     timelimit = ''
+    index = ''
     
     def __init__(self):
         parser = argparse.ArgumentParser(description='Gromacs MD Job Factory',
@@ -116,6 +117,8 @@ class JobParser:
                             required=True)
         parser.add_argument('-c', '--cpt', dest='cpt', type=str,
                             help='store the time to extend the simulation for extend jobs')
+        parser.add_argument('-i', '--index', dest='index', type=str,
+                            help='store the index file')
         
         args, unknown = parser.parse_known_args(sys.argv[3:])
 
@@ -124,7 +127,9 @@ class JobParser:
         self.mdp = os.path.abspath(args.mdp)
         if args.cpt:
             self.cpt = os.path.abspath(args.cpt)
-        
+        if args.index:
+            self.index = os.path.abspath(args.index)    
+            
     def extend(self):
         parser = argparse.ArgumentParser(
             description='Extend job arguments')
@@ -170,7 +175,9 @@ class GmxJobFactory:
                             'TOPOL': self.args.topol,
                             'MDP': self.args.mdp,
                             'MODULE': modules[self.args.machine],
-                            'TIMETOEXTEND': self.args.timetoextend}
+                            'TIMETOEXTEND': self.args.timetoextend,
+                            'INDEXOPTION': self.args.index}
+        
         getattr(self, self.args.job)()
         
     def write_template(self, filename, outname):
@@ -186,6 +193,9 @@ class GmxJobFactory:
         print 'Setting mdrun script'
         if self.args.cpt:
             self.replacement['CPTOPTION'] = '-cpi {0} '.format(self.args.cpt)
+        if self.args.index:
+            self.replacement['INDEXOPTION'] = '-n {0} '.format(self.args.index)
+            
         self.write_template('{0}/template_prepare_mdrun.sh'.format(template_path),
                             'prepare_{0}.sh'.format(self.args.name))
         self.write_template('{0}/template_mdrun_{1}.sh'.format(template_path,

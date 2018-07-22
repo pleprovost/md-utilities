@@ -4,4 +4,4 @@ set -e
 
 MODULE
 
-gmx grompp -f MDP -c STRUCT -p TOPOL -o NAME.tpr 
+gmx grompp -f MDP -c STRUCT -p TOPOL -o NAME.tpr INDEXOPTION 
