@@ -23,23 +23,25 @@ if [ ! -f $XTC ]; then
     exit 1
 fi
 
-# Arrange the molecules to avoid jump because of the pbc
-#$GMX trjconv -f $XTC -s $TPR -o nojump.xtc -pbc nojump <<EOF
-#0
-#EOF
+#rm nojump.xtc
 
-# Center make whole the thing
-$GMX trjconv -f $XTC -s $TPR -o ${XTC%.*}_noPBC.xtc -ur tric -pbc mol <<EOF
+# Arrange the molecules to avoid jump because of the pbc
+$GMX trjconv -f $XTC -s $TPR -o nojump.xtc -pbc nojump << EOF
 0
 EOF
-#rm nojump.xtc
+
+# Center make whole the thing
+$GMX trjconv -f nojump.xtc -s $TPR -o ${XTC%.*}_noPBC.xtc -pbc mol -ur compact -center << EOF 
+1
+0
+EOF
 
 # Extract first frame
 $GMX trjconv -s $TPR -f ${XTC%.*}_noPBC.xtc -o ${XTC%.*}_noPBC.gro -dump 0 <<EOF
 0
 EOF
 
-
+rm nojump.xtc
 
 
 

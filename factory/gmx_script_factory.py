@@ -20,164 +20,83 @@ modules = {'taito': 'module load gromacs-env',
            'carpo' : 'module load GROMACS/2016.4',
            'local' : ''}
 
-class JobParser:
-    job = ''
-    machine = ''
-    topol = ''
-    name = ''
-    struct = ''
-    mdp = ''
-    timetoextend = ''
-    cpt = ''
-    nodes = ''
-    timelimit = ''
-    index = ''
-    
-    def __init__(self):
-        parser = argparse.ArgumentParser(description='Gromacs MD Job Factory',
-                                         usage='''gmx_job_factory <job> <machine> [<args>]
-                                         
+def NewParser():
+    parser = argparse.ArgumentParser(description='Gromacs MD Job Factory',
+                                     usage='''gmx_job_factory <job> <machine> [<args>]
+                                     
                                          The job offered:
-                                         mdrun     Create a new MD job 
-                                         extend    Extend an existing MD job
-
+                                     mdrun     Create a new MD job 
+                                     extend    Extend an existing MD job
+                                     
                                          The machine offered:
-                                         taito     CSC
-                                         sisu      CSC
-                                         carpo     University of Oulu
-                                         local
-                                         ''')
-
-        parser.add_argument('job', help='Select a job')
-        parser.add_argument('machine', help='Select a machine')
-        parser.add_argument('-t', '--topol', dest='topol', type=str,
-                            help='store the topology of the system, the file must be of type .TOP, .TPR or .CPT for continuation job', required=True)
-        
-        args, unknown = parser.parse_known_args(sys.argv[1:])
-        
-        if not hasattr(self, args.job):
-            print 'Unrecognized job'
-            parser.print_help()
-            exit(1)
-            
-        getattr(self, args.job)()
-
-        if args.machine not in machines:
-            print 'Unrecognized machine'
-            parser.print_help()
-            exit(1)
-
-        if args.machine != 'local':
-            self.machine_parser()
-            
-        self.job = args.job
-        self.machine = args.machine
-        self.topol = os.path.abspath(args.topol)        
+                                     taito     CSC
+                                     sisu      CSC
+                                     carpo     University of Oulu
+                                     local
+                                     ''')
     
-    def __str__(self):
-        output = '>>>>>>>>>>>>>>>\n'
-        output += 'Job type : {0}\n'.format(self.job)
-        if self.job == 'mdrun':
-            output += 'Job name : {0}\nStructure : {1}\nTopology : {2}\nmdp file : {3}\n'.format(
-                self.name,
-                self.struct,
-                self.topol,
-                self.mdp)
-        if self.job == 'extend':
-            output += 'Topology : {0}\ncpt file : {1}\ntime to extend : {2}\n'.format(
-                self.topol,
-                self.cpt,
-                int(float(self.timetoextend)/1000))
-
-        if self.machine != 'local':
-            output += 'Running on {0} with {1} nodes for {2} hours\n'.format(self.machine,
-                                                                             self.nodes,
-                                                                             self.timelimit)
-        else:
-            output += 'Running locally\n'
-        output += '<<<<<<<<<<<<<<<\n'  
-            
-        return output
+    subparsers = parser.add_subparsers(dest='job')
+    mdrun_parser = subparsers.add_parser('mdrun', description='Plop1')
+    mdrun_parser.add_argument('-n', '--name', dest='name', type=str,
+                              help='store the name of the name of the job required '\
+                              '(if not the name is set to the job type)',
+                              default='md')
+    mdrun_parser.add_argument('-s', '--struct', dest='struct', type=str,
+                                  help='store the structure file of the system, '\
+                              'the file must be of type .GRO of .PDB',
+                              required=True)
+    mdrun_parser.add_argument('-f', '--mpd', dest='mdp', type=str,
+                              help='store the mdp file for the job, the file must be of type .MDP',
+                              required=True)
+    mdrun_parser.add_argument('-t', '--topol', type=str, help='store the topology file',
+                              required=True)
+    mdrun_parser.add_argument('-c', '--cpt', dest='cpt', type=str,
+                              help='store the time to extend the simulation for extend jobs')
+    mdrun_parser.add_argument('-i', '--index', dest='index', type=str,
+                              help='store the index file')
+    mdrun_parser.add_argument('-m', '--machine', type=str, help='machine selection', default='local')
+    mdrun_parser.add_argument('-N', '--nodes', type=str, help='nodes selection')
+    mdrun_parser.add_argument('-l', '--limit', type=str, help='time limit selection')
     
-    def mdrun(self):
-        parser = argparse.ArgumentParser(
-            description='MD job arguments')
-        # prefixing the argument with -- means it's optional
-
-        parser.add_argument('-n', '--name', dest='name', type=str,
-                            help='store the name of the name of the job required '\
-                            '(if not the name is set to the job type)',
-                            required=True)
-        parser.add_argument('-s', '--struct', dest='struct', type=str,
-                            help='store the structure file of the system, '\
-                            'the file must be of type .GRO of .PDB',
-                            required=True)
-        parser.add_argument('-m', '--mpd', dest='mdp', type=str,
-                            help='store the mdp file for the job, the file must be of type .MDP',
-                            required=True)
-        parser.add_argument('-c', '--cpt', dest='cpt', type=str,
-                            help='store the time to extend the simulation for extend jobs')
-        parser.add_argument('-i', '--index', dest='index', type=str,
-                            help='store the index file')
+    
+    extend_parser = subparsers.add_parser('extend', description='Plop2')
+    extend_parser.add_argument('-c', '--cpt', dest='cpt', type=str,
+                               help='store the time to extend the simulation for extend '\
+                               'jobs',
+                               required=True)
+    extend_parser.add_argument('-e', '--extend', dest='extend', type=str,
+                               help='store the time to extend the simulation for extend '\
+                               'jobs',
+                               required=True)
+    extend_parser.add_argument('-m', '--machine', type=str, help='machine selection', default='local')
+    extend_parser.add_argument('-N', '--nodes', type=str, help='nodes selection')
+    extend_parser.add_argument('-l', '--limit', type=str, help='time limit selection')
+    
+    args, job_type = parser.parse_known_args(sys.argv[1:])
+    
+    if args.machine != 'local' and (args.nodes == None or args.limit == None):
+        parser.error("{0} machine require to provide --nodes and --limit".format(args.machine))
         
-        args, unknown = parser.parse_known_args(sys.argv[3:])
-
-        self.name = args.name
-        self.struct = os.path.abspath(args.struct)
-        self.mdp = os.path.abspath(args.mdp)
-        if args.cpt:
-            self.cpt = os.path.abspath(args.cpt)
-        if args.index:
-            self.index = os.path.abspath(args.index)    
-            
-    def extend(self):
-        parser = argparse.ArgumentParser(
-            description='Extend job arguments')
-        # NOT prefixing the argument with -- means it's not optional
-        # extend
-        parser.add_argument('-c', '--cpt', dest='cpt', type=str,
-                            help='store the time to extend the simulation for extend jobs', required=True)
-        parser.add_argument('-e', '--extend', dest='extend', type=str,
-                            help='store the time to extend the simulation for extend jobs', required=True)
-        
-        args, unknown = parser.parse_known_args(sys.argv[3:])
-
-        self.cpt = os.path.abspath(args.cpt)
-        self.timetoextend = args.extend
-
-    def machine_parser(self):
-        parser = argparse.ArgumentParser(
-            description='')
-        # Machine related arguments
-        parser.add_argument('-N', '--nodes', dest='nodes', type=int,
-                            help='store the number of nodes allocated for this job',
-                            required=True)
-        parser.add_argument('-l', '--timelimit', dest='timelimit', type=str,
-                            help='store the time limit allocated to this job',
-                            required=True)
-        
-        args, unknown = parser.parse_known_args(sys.argv[3:])
-        
-        self.nodes = str(args.nodes)
-        self.timelimit = str(args.timelimit)
+    return args, job_type
 
 
 class GmxJobFactory:
     def __init__(self, args):
         self.args = args           
-        self.replacement = {'NAME': self.args.name,
+        self.replacement = {'NAME': '',
                             'EMAIL': email,
-                            'TIMELIMIT': self.args.timelimit,
-                            'NODE': self.args.nodes,
+                            'TIMELIMIT': '',
+                            'NODE': '',
                             'CPTOPTION': '',
-                            'CPTFILE': self.args.cpt,
-                            'STRUCT': self.args.struct,
-                            'TOPOL': self.args.topol,
-                            'MDP': self.args.mdp,
+                            'CPTFILE': '',
+                            'STRUCT': '',
+                            'TOPOL': '',
+                            'MDP': '',
                             'MODULE': modules[self.args.machine],
-                            'TIMETOEXTEND': self.args.timetoextend,
-                            'INDEXOPTION': self.args.index}
-        
+                            'TIMETOEXTEND': '',
+                            'INDEXOPTION': ''}
+        if (self.args.machine == None):
+            self.args.machine = 'local'
         getattr(self, self.args.job)()
         
     def write_template(self, filename, outname):
@@ -191,6 +110,14 @@ class GmxJobFactory:
             
     def mdrun(self):
         print 'Setting mdrun script'
+        if self.args.name:
+            self.replacement['NAME'] = self.args.name
+        if self.args.struct:
+            self.replacement['STRUCT'] = self.args.struct
+        if self.args.topol:
+            self.replacement['TOPOL'] = self.args.topol
+        if self.args.mdp:
+            self.replacement['MDP'] = self.args.mdp
         if self.args.cpt:
             self.replacement['CPTOPTION'] = '-cpi {0} '.format(self.args.cpt)
         if self.args.index:
@@ -204,21 +131,20 @@ class GmxJobFactory:
         
     def extend(self):
         print 'Setting extend script'
-        self.replacement['NAME'] = 'extd-{0}ns'.format(int(float(self.args.timetoextend)/1000))
+        self.replacement['NAME'] = 'extd-{0}ns'.format(int(float(self.args.extend)/1000))
         self.replacement['CPTOPTION'] = '-cpi {0} -noappend'.format(self.args.cpt)
         self.write_template('{0}/template_prepare_extend.sh'.format(template_path),
                             'prepare_{0}.sh'.format(self.replacement['NAME']))
         self.write_template('{0}/template_mdrun_{1}.sh'.format(template_path,
-                                                           self.args.machine),
+                                                               self.args.machine),
                             'job_{0}.sh'.format(self.replacement['NAME']))
             
 if __name__ == "__main__":
     # # Input parameters handling
-    job_args = JobParser()   
-    print job_args
-    GmxJobFactory(job_args)
-    
-    
+    #job_args = JobParser()   
+    #print job_args
+    job, job_type = NewParser()
+    GmxJobFactory(job)
 
     
 
