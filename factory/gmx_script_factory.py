@@ -71,9 +71,11 @@ def NewParser():
     extend_parser.add_argument('-m', '--machine', type=str, help='machine selection', default='local')
     extend_parser.add_argument('-N', '--nodes', type=str, help='nodes selection')
     extend_parser.add_argument('-l', '--limit', type=str, help='time limit selection')
+
     
     args, job_type = parser.parse_known_args(sys.argv[1:])
-    
+    print args
+    print job_type
     if args.machine != 'local' and (args.nodes == None or args.limit == None):
         parser.error("{0} machine require to provide --nodes and --limit".format(args.machine))
         
@@ -119,7 +121,7 @@ class GmxJobFactory:
         if self.args.mdp:
             self.replacement['MDP'] = self.args.mdp
         if self.args.cpt:
-            self.replacement['CPTOPTION'] = '-cpi {0} '.format(self.args.cpt)
+            self.replacement['CPTOPTION'] = '-t {0} '.format(self.args.cpt)
         if self.args.index:
             self.replacement['INDEXOPTION'] = '-n {0} '.format(self.args.index)
             
