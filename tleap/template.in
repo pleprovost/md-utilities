@@ -1,0 +1,22 @@
+#
+#	Template tleap input	
+#	
+#
+source leaprc.protein.ff14SB		# Source leaprc file for ff14SB protein
+source leaprc.gaff2			# Source leaprc file for gaff2 
+source leaprc.water.tip3p		# Source leaprc file for tip3p water model 
+loadamberparams frcmod.phosaa10		# Source amber parameters for Phosphates
+
+sys = loadpdb complex.pdb		# Load the pdb prepared before with pdb4amber
+
+# loadamberprep complex.prepi		# Load amber prepi if necessary 
+# loadamberparams complex.frcmod	# Load amber parameters if necessary
+
+solvatebox sys TIP3PBOX 10.0		# Solvate a box with tip3p at 1.0 nm around the sys
+charge sys     				# Display the total charge of the solvated sys
+addIons sys NA 0			# Add NA+ ions to neutralize the system (Can take so time)
+addIons sys CL 0			# Add CL- ions to neutralize the system (Can take so time)
+
+saveamberparm sys template.prmtop template.prmcrd # Write output file 
+
+quit

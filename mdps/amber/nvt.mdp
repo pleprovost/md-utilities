@@ -1,0 +1,57 @@
+define		= -DPOSRES ; Modify at will with protein ligand complex
+title		= nvt
+; Run control
+integrator	= md	
+nsteps		= 50000 ; 2 * 50000 = 100 ps
+dt		= 0.002	
+
+; Output control
+nstxout		        = 500	
+nstvout		        = 500	
+nstenergy	        = 500	
+nstlog		        = 500	
+nstxout-compressed  	= 500   
+
+; Bonds
+continuation	            = no
+constraint_algorithm        = lincs	
+constraints	            = h-bonds	
+lincs_iter	            = 1	
+lincs_order	            = 4	
+
+; Neighborsearching
+cutoff-scheme       = Verlet
+ns_type		    = grid		
+nstlist		    = 20
+rlist		    = 1.0
+
+; Van der Waals
+vdw-type	    = cutoff	
+vdw-modifier	    = force-switch
+rvdw-switch	    = 1.0
+rvdw		    = 1.0
+DispCorr	    = EnerPres
+
+; Electrostatics
+coulombtype	    = PME
+rcoulomb	    = 1.0
+pme_order	    = 4	
+fourierspacing	    = 0.16
+
+; Temperature coupling
+tcoupl		= V-rescale
+tc-grps		= Protein Water_and_ions
+tau_t		= 0.1	  0.1
+ref_t		= 298 	  298
+
+; Pressure coupling
+pcoupl		        = no
+
+; Periodic boundary conditiosn
+pbc		= xyz
+
+; Velocity generation
+gen_vel		= yes
+gen_temp	= 300
+gen_seed	= -1
+

@@ -1,0 +1,56 @@
+title		= production
+; Run control
+integrator	= md	
+nsteps		= 50000000 ; 2 * 50000000 = 100000 ps (100ns)
+dt		= 0.002	
+
+; Output control
+nstenergy	        = 1000	
+nstlog		        = 1000	
+nstxout-compressed  	= 1000                                      
+
+; Bonds
+continuation	            = yes
+constraint_algorithm        = lincs	
+constraints	            = h-bonds	
+lincs_iter	            = 1	
+lincs_order	            = 4	
+
+; Neighborsearching
+cutoff-scheme       = Verlet
+ns_type		    = grid		
+nstlist		    = 20
+rlist		    = 1.2
+
+; Van der Waals
+vdw-type	    = cutoff	
+vdw-modifier	    = force-switch
+rvdw-switch	    = 1.0
+rvdw		    = 1.2
+DispCorr	    = EnerPres
+
+; Electrostatics
+coulombtype	    = PME
+rcoulomb	    = 1.2
+pme_order	    = 4	
+fourierspacing	    = 0.16
+
+; Temperature coupling
+tcoupl		= V-rescale
+tc-grps		= Protein Water_and_ions
+tau_t		= 0.1	  0.1
+ref_t		= 298 	  298
+
+; Pressure coupling
+pcoupl		        = Parrinello-Rahman
+pcoupltype	        = isotropic
+tau_p		        = 2.0
+ref_p		        = 1.0
+compressibility     	= 4.5e-5
+
+; Periodic boundary conditions
+pbc		= xyz
+
+; Velocity generation
+gen_vel		= no
+

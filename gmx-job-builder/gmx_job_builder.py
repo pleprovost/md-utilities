@@ -20,7 +20,8 @@ modules = {'taito': 'module load gromacs-env',
            'carpo' : 'module load GROMACS/2016.4',
            'local' : ''}
 
-def NewParser():
+def job_parser():
+    """ Parse all the necessary arguments for the requested job."""
     parser = argparse.ArgumentParser(description='Gromacs MD Job Factory',
                                      usage='''gmx_job_factory <job> <machine> [<args>]
                                      
@@ -74,21 +75,19 @@ def NewParser():
 
     
     args, job_type = parser.parse_known_args(sys.argv[1:])
-    print args
-    print job_type
+
     if args.machine != 'local' and (args.nodes == None or args.limit == None):
         parser.error("{0} machine require to provide --nodes and --limit".format(args.machine))
         
     return args, job_type
-
-
+        
 class GmxJobFactory:
     def __init__(self, args):
         self.args = args           
-        self.replacement = {'NAME': '',
+        self.replacement = {'NAME': 'gmx',
                             'EMAIL': email,
-                            'TIMELIMIT': '',
-                            'NODE': '',
+                            'TIMELIMIT': '1:00:00',
+                            'NODE': '1',
                             'CPTOPTION': '',
                             'CPTFILE': '',
                             'STRUCT': '',
@@ -111,7 +110,7 @@ class GmxJobFactory:
              outfile.write(template_text)
             
     def mdrun(self):
-        print 'Setting mdrun script'
+        print('Setting mdrun script')
         if self.args.name:
             self.replacement['NAME'] = self.args.name
         if self.args.struct:
@@ -132,7 +131,7 @@ class GmxJobFactory:
                             'job_{0}.sh'.format(self.args.name))
         
     def extend(self):
-        print 'Setting extend script'
+        print('Setting extend script')
         self.replacement['NAME'] = 'extd-{0}ns'.format(int(float(self.args.extend)/1000))
         self.replacement['CPTOPTION'] = '-cpi {0} -noappend'.format(self.args.cpt)
         self.write_template('{0}/template_prepare_extend.sh'.format(template_path),
@@ -142,15 +141,11 @@ class GmxJobFactory:
                             'job_{0}.sh'.format(self.replacement['NAME']))
             
 if __name__ == "__main__":
-    # # Input parameters handling
-    #job_args = JobParser()   
-    #print job_args
-    job, job_type = NewParser()
+    job, job_type = job_parser()
     GmxJobFactory(job)
 
-    
+    # Parse args
 
-    
-    
-    
-    
+    # Build string with args
+
+    # Write string

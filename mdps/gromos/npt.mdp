@@ -1,0 +1,63 @@
+define		= -DPOSRES
+title		= npt
+; Run control
+integrator	= md	
+nsteps		= 500000 ; 2 * 500000 = 1000 ps (1ns)
+dt		= 0.002	
+
+; Output control
+nstxout		        = 500	
+nstvout		        = 500	
+nstenergy	        = 500	
+nstlog		        = 500	
+nstxout-compressed  	= 500                                      
+
+; Bonds
+continuation	            = yes
+constraint_algorithm        = lincs	
+constraints	            = h-bonds	
+lincs_iter	            = 1	
+lincs_order	            = 4	
+
+; Neighborsearching
+cutoff-scheme       = Verlet
+ns_type		    = grid		
+nstlist		    = 5 
+rlist		    = 1.4
+
+; Van der Waals
+rvdw		    = 1.4
+DispCorr	    = EnerPres
+
+; Electrostatics
+coulombtype	    = PME
+rcoulomb	    = 1.4
+pme_order	    = 4	
+fourierspacing	    = 0.16
+
+; Temperature coupling
+tcoupl		= Berendsen
+tc-grps		= Protein Water_and_ions
+tau_t		= 0.1	  0.1
+ref_t		= 310 	  310
+
+; Pressure coupling
+pcoupl		        = Berendsen
+pcoupltype	        = isotropic
+tau_p		        = 2.0
+ref_p		        = 1.0
+compressibility     	= 4.5e-5
+refcoord_scaling	= com
+
+; Periodic boundary conditions
+pbc		= xyz
+
+; Velocity generation
+gen_vel		= yes
+gen_temp	= 310
+gen_seed	= -1
+
+; COM motion removal
+nstcomm         = 10
+comm-mode       = Linear
+comm-grps       = System

@@ -1,0 +1,27 @@
+define      = -DFLEXIBLE
+title 	    = minimization
+; Run control
+integrator  = steep
+emtol       = 100.0
+emstep      = 0.01
+nsteps      = 50000
+
+; Neighborsearching
+nstlist		= 1
+cutoff-scheme   = Verlet
+ns_type		= grid	
+rlist 		= 1.2
+
+; Van der Waals
+vdwtype 	    = cutoff
+vdw-modifier	    = force-switch
+rvdw-switch	    = 1.0
+rvdw		    = 1.2
+DispCorr	    = no
+
+; Electrostatics
+coulombtype	    = PME
+rcoulomb	    = 1.2
+
+; Periodic boundary conditions
+pbc		= xyz	
