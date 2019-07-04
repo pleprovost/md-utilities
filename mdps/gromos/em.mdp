@@ -1,8 +1,8 @@
-gromasdefine      = -DFLEXIBLE
+define      = -DFLEXIBLE
 title 	    = minimization
 ; Run control
 integrator  = steep
-emtol       = 100.0
+emtol       = 500.0
 emstep      = 0.01
 nsteps      = 50000
 

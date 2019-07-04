@@ -15,7 +15,7 @@ nstxout-compressed  	= 500
 ; Bonds
 continuation	            = no
 constraint_algorithm        = lincs	
-constraints	            = h-bonds	
+constraints	            = all-bonds	
 lincs_iter	            = 1	
 lincs_order	            = 4	
 
@@ -27,8 +27,6 @@ rlist		    = 1.0
 
 ; Van der Waals
 vdw-type	    = cutoff	
-vdw-modifier	    = force-switch
-rvdw-switch	    = 1.0
 rvdw		    = 1.0
 DispCorr	    = EnerPres
 
@@ -39,10 +37,10 @@ pme_order	    = 4
 fourierspacing	    = 0.16
 
 ; Temperature coupling
-tcoupl		= V-rescale
+tcoupl		= Berendsen
 tc-grps		= Protein Water_and_ions
 tau_t		= 0.1	  0.1
-ref_t		= 298 	  298
+ref_t		= 310 	  310
 
 ; Pressure coupling
 pcoupl		        = no
@@ -52,6 +50,6 @@ pbc		= xyz
 
 ; Velocity generation
 gen_vel		= yes
-gen_temp	= 300
+gen_temp	= 310
 gen_seed	= -1
 

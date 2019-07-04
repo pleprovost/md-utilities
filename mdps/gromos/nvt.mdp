@@ -15,7 +15,7 @@ nstxout-compressed  	= 500
 ; Bonds
 continuation	            = no
 constraint_algorithm        = lincs	
-constraints	            = h-bonds	
+constraints	            = all-bonds	
 lincs_iter	            = 1	
 lincs_order	            = 4	
 
@@ -49,6 +49,6 @@ pbc		= xyz
 
 ; Velocity generation
 gen_vel		= yes
-gen_temp	= 300
+gen_temp	= 310
 gen_seed	= -1
 
